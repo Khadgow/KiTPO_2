@@ -71,28 +71,6 @@ class CycleList {
     }
   }
 
-  def sortFuncStyle(): CycleList = {
-    if (this.length <= 1)
-      this
-    else {
-      val base = this.head.data
-      var listMore = new CycleList(comparator)
-      val listEqual = new CycleList(comparator)
-      var listLess = new CycleList(comparator)
-
-      forEach(value => {
-        if (comparator.compare(base, value) > 0) listMore.add(value)
-        if (comparator.compare(base, value) < 0) listLess.add(value)
-        if (comparator.compare(base, value) == 0) listEqual.add(value)
-      })
-      listMore = listMore.sortFuncStyle()
-      listLess = listLess.sortFuncStyle()
-      listEqual.forEach(listMore.add(_))
-      listLess.forEach(listMore.add(_))
-      listMore
-    }
-  }
-
   def mergeSortFuncStyle(): CycleList = {
     if (this.length <= 1)
       this
