@@ -93,6 +93,62 @@ class CycleList {
     }
   }
 
+  def mergeSortFuncStyle(): CycleList = {
+    if (this.length <= 1)
+      this
+    else {
+      val sortedList = new CycleList(comparator)
+      var leftList = new CycleList(comparator)
+      var rightList = new CycleList(comparator)
+      val middle = this.length / 2;
+      forEachInRange(x => {
+        leftList.add(x)
+      }, 0, middle)
+
+      forEachReverseInRange(x => {
+        rightList.add(x)
+      }, 1, middle + 1)
+
+      leftList = leftList.mergeSortFuncStyle()
+      rightList = rightList.mergeSortFuncStyle()
+
+      var left = leftList.head
+      var right = rightList.head
+      var leftHead = 0
+      var rightHead = 0
+
+        while (leftHead < leftList.length && rightHead < rightList.length) {
+          if (comparator.compare(left.data, right.data) > 0) {
+            sortedList.add(right.data)
+            right = right.next
+            rightHead = rightHead + 1
+          }
+          else if (comparator.compare(left.data, right.data) <= 0) {
+            sortedList.add(left.data)
+            left = left.next
+            leftHead = leftHead + 1
+          }
+        }
+        if (rightHead == rightList.length) {
+          while (leftHead < leftList.length) {
+            sortedList.add(left.data)
+            left = left.next
+            leftHead = leftHead + 1
+          }
+        }
+
+        if (leftHead == leftList.length) {
+          while (rightHead < rightList.length) {
+            sortedList.add(right.data)
+            right = right.next
+            rightHead = leftHead + 1
+          }
+        }
+
+      sortedList
+    }
+  }
+
   private def mergeSort(headNode: Node): Node = {
     if (headNode == null || headNode.next == null) {
       return headNode
@@ -199,6 +255,28 @@ class CycleList {
     for (i <- 0 until length) {
       iterator(tmp.data)
       tmp = tmp.next
+    }
+  }
+
+  def forEachInRange(iterator: Any => Unit, start: Int, end: Int): Unit = {
+    var tmp = head
+    for (i <- 0 until start) {
+      tmp = tmp.next
+    }
+    for (i <- start until end) {
+      iterator(tmp.data)
+      tmp = tmp.next
+    }
+  }
+
+  def forEachReverseInRange(iterator: Any => Unit, start: Int, end: Int): Unit = {
+    var tmp = head
+    for (i <- 0 until start) {
+      tmp = tmp.prev
+    }
+    for (i <- start until end) {
+      iterator(tmp.data)
+      tmp = tmp.prev
     }
   }
 
